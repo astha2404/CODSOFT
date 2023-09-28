@@ -1,0 +1,62 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class Quiz {
+    private Map<String, String> questionsAndAnswers;
+    private Scanner scanner;
+    private int score;
+
+    public Quiz() {
+        questionsAndAnswers = new HashMap<>();
+        scanner = new Scanner(System.in);
+        score = 0;
+    }
+
+    public void addQuestion(String question, String answer) {
+        questionsAndAnswers.put(question, answer);
+    }
+
+    public void startQuiz() {
+        for (String question : questionsAndAnswers.keySet()) {
+            System.out.println(question);
+            Timer timer = new Timer();
+            timer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    System.out.println("Time's up!");
+                    scanner.close();
+                    System.exit(0);
+                }
+            }, 5000); // 5 seconds timer
+
+            String userAnswer = scanner.nextLine();
+            String correctAnswer = questionsAndAnswers.get(question);
+
+            if (userAnswer.equalsIgnoreCase(correctAnswer)) {
+                score++;
+                System.out.println("Correct! Your score is: " + score);
+            } else {
+                System.out.println("Incorrect. The correct answer is: " + correctAnswer);
+            }
+
+            timer.cancel(); // stop the timer
+        }
+
+        displayResult();
+    }
+
+    private void displayResult() {
+        System.out.println("Quiz Completed!");
+        System.out.println("Your final score is: " + score + "/" + questionsAndAnswers.size());
+    }
+
+    public static void main(String[] args) {
+        Quiz quiz = new Quiz();
+        quiz.addQuestion("What is the capital of France?", "Paris");
+        quiz.addQuestion("What is the largest ocean in the world?", "Pacific");
+        quiz.startQuiz();
+    }
+}
