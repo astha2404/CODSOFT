@@ -1,0 +1,56 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Map<String, Integer> marks = new HashMap<>();
+        String subject;
+        int mark;
+
+        while (true) {
+            System.out.print("Enter the subject name (or 'done' to finish): ");
+            subject = scanner.nextLine();
+            if (subject.equalsIgnoreCase("done")) {
+                break;
+            }
+
+            System.out.print("Enter the marks obtained (out of 100): ");
+            mark = scanner.nextInt();
+            marks.put(subject, mark);
+            scanner.nextLine(); // consume newline not consumed by nextInt()
+        }
+
+        int totalMarks = 0;
+        for (int markValue : marks.values()) {
+            totalMarks += markValue;
+        }
+
+        double averagePercentage = (double) totalMarks / marks.size();
+
+        String grade = calculateGrade(averagePercentage);
+
+        displayResults(totalMarks, averagePercentage, grade);
+    }
+
+    private static String calculateGrade(double averagePercentage) {
+        if (averagePercentage >= 90) {
+            return "A";
+        } else if (averagePercentage >= 80) {
+            return "B";
+        } else if (averagePercentage >= 70) {
+            return "C";
+        } else if (averagePercentage >= 60) {
+            return "D";
+        } else {
+            return "F";
+        }
+    }
+
+    private static void displayResults(int totalMarks, double averagePercentage, String grade) {
+        System.out.println("Total Marks: " + totalMarks);
+        System.out.println("Average Percentage: " + averagePercentage + "%");
+        System.out.println("Grade: " + grade);
+    }
+}
